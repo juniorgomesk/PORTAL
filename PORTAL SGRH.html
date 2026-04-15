@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionalidades de suporte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Controle de exibição das telas (Single Page Application simples) */
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+        
+        /* Estilização dos cards de módulos do checklist */
+        .module-group {
+            border: 1px solid #e5e7eb;
+            background: white;
+            transition: all 0.2s;
+        }
+        .module-group:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <!-- CHAMA OS DATABASES -->
+    <script src="database_links.js"></script>
+    <script src="database_situacoes.js"></script>
+    <script src="database_orgaos.js"></script>
+    <script src="database_vinculos.js"></script>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <!-- CABEÇALHO DA PAGINA INICIAL -->
+    <div id="view-home" class="view-section active max-w-5xl mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Funcionalidades de suporte</h1>
+            <p class="text-gray-600">Selecione a funcionalidade que deseja utilizar</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            
+            <!-- BOTÃO DE LIBERAÇÃO -->
+            <button onclick="showView('view-liberacao')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-blue-500">
+                <div class="bg-blue-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-blue-600 group-hover:text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                    </svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Liberação de sistema</h2>
+                <p class="text-xs text-gray-500">Mensagens padrão WhatsApp e Chamados</p>
+            </button>
+            
+            <!-- BOTÃO DE CHECKLIST --> 
+            <button onclick="showView('view-checklist')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-green-500">
+                <div class="bg-green-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-600 transition-colors">
+                    <svg class="w-6 h-6 text-green-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Checklist folha de pagemento</h2>
+                <p class="text-xs text-gray-500">Pendências de fechamento</p>
+            </button>
+            
+            <!-- BOTÃO DE ÓRGÃOS -->
+            <button onclick="showView('view-consulta')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-purple-500">
+                <div class="bg-purple-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-purple-600 group-hover:text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                    </svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Consulta Órgãos</h2>
+                <p class="text-xs text-gray-500">Consulta a códigos e grupos</p>
+            </button>
+            
+            <!-- BOTÃO DE VINCULOS -->
+            <button onclick="showView('view-vinculos')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-orange-500">
+                <div class="bg-orange-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-orange-600 transition-colors">
+                    <svg class="w-6 h-6 text-orange-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Consultas aos vínculos</h2>
+                <p class="text-xs text-gray-500">Consulta a códigos e descrições</p>
+            </button>
+
+            <!-- BOTÃO DE SITUAÇÕES -->
+            <button onclick="showView('view-situacoes')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-cyan-500">
+                <div class="bg-cyan-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-cyan-600 transition-colors">
+                    <svg class="w-6 h-6 text-cyan-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Situações funcionais</h2>
+                <p class="text-xs text-gray-500">Consulta a códigos e descrições</p>
+            </button>
+
+            <!-- BOTÃO DE LINKS -->
+            <button onclick="showView('view-links')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-pink-500">
+                <div class="bg-pink-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-pink-600 transition-colors">
+                    <svg class="w-6 h-6 text-pink-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Links de uso diários</h2>
+                <p class="text-xs text-gray-500">Relação de sites de uso diário</p>
+            </button>
+
+        </div>
+    </div>
+
+    <!-- PAGINA DE LIBERAÇÃO -->
+    <div id="view-liberacao" class="view-section max-w-2xl mx-auto">
+        <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Configuração de Liberação</h1>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Sigla do Órgão <span class="text-red-500">*</span></label>
+                <input type="text" id="orgaoSigla" placeholder="Ex: SEAD" class="w-full px-4 py-3 border border-gray-300 rounded-lg uppercase outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div id="modulosLibContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"></div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Horário liberação:</label>
+                <div class="flex items-center gap-4">
+                    <input type="time" id="horaLiberacao" class="w-32 px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                    
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="checkbox" id="checkSalvarHora" checked class="h-5 w-5 text-blue-600 rounded">
+                        <span class="ml-2 text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Salvar horário</span>
+                    </label>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                <button onclick="generateLib()" class="flex-1 px-6 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all">Gerar Listagem</button>
+                <button onclick="clearLib()" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300">Limpar</button>
+            </div>
+            <div class="space-y-6">
+                <div>
+                     <!-- CAIXA DA INFORMAÇÃO DE LIBERAÇÃO -->
+                    <label class="text-sm font-bold text-gray-500">Informação de liberação</label>
+                    <div class="relative group mt-1">
+                        <textarea id="outLib" rows="6" readonly class="w-full p-4 border border-blue-200 bg-blue-50 rounded-lg text-gray-800 font-mono text-sm resize-none"></textarea>
+                        <button onclick="copyToClipboard('outLib', 'msgLib')" class="absolute top-3 right-3 p-2 bg-blue-600 text-white rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    <p id="msgLib" class="mt-1 text-sm text-green-600 font-semibold opacity-0 h-5 text-right transition-opacity">Copiado!</p>
+                </div>
+                <div>
+                    <!-- CAIXA DA RESPOSTA DO CHAMADO -->
+                    <label class="text-sm font-bold text-gray-500">Resposta chamado</label>
+                    <div class="relative group mt-1">
+                        <textarea id="outChamado" rows="2" readonly class="w-full p-4 border border-blue-200 bg-blue-50 rounded-lg text-gray-800 font-mono text-sm resize-none"></textarea>
+                        <button onclick="copyToClipboard('outChamado', 'msgCha')" class="absolute top-3 right-3 p-2 bg-blue-600 text-white rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        </button>
+                    </div>
+                    <p id="msgCha" class="mt-1 text-sm text-green-600 font-semibold opacity-0 h-5 text-right transition-opacity">Copiado!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGINA DE CHECKLIST -->
+    <div id="view-checklist" class="view-section max-w-5xl mx-auto">
+        <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-8 text-center">Checklist de Pendências</h1>
+            <div id="checklistGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+            
+            <div class="flex gap-4 justify-center mb-8">
+                <button onclick="generateCheck()" class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 shadow-md">Gerar Checklist</button>
+                <button onclick="clearCheck()" class="px-8 py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 shadow-md">Limpar</button>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-500 mb-1">Informação checklist</label>
+                <div class="relative group">
+                    <textarea id="outCheck" rows="10" readonly class="w-full p-4 border border-blue-200 bg-blue-50 rounded-lg text-gray-800 font-mono text-sm resize-none"></textarea>
+                    <button onclick="copyToClipboard('outCheck', 'msgCheck')" class="absolute top-4 right-4 p-2 bg-blue-600 text-white rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    </button>
+                </div>
+                <p id="msgCheck" class="mt-1 text-sm text-green-600 font-semibold opacity-0 h-5 text-right transition-opacity">Copiado!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGINA DE CONSULTA ÓRGÃOS -->
+    <div id="view-consulta" class="view-section max-w-4xl mx-auto">
+        <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Consulta de Órgãos</h1>
+            <input type="text" id="inputBuscaOrgao" onkeyup="buscarOrgaoDebounced()" placeholder="Pesquise por qualquer termo..." class="w-full px-5 py-4 border border-gray-300 rounded-xl shadow-sm outline-none focus:ring-2 focus:ring-purple-500 text-lg mb-8">
+            <div id="resultadoConsulta" class="space-y-4"></div>
+        </div>
+    </div>
+
+
+    <!-- PAGINA DE CONSULTA VINCULOS -->
+    <div id="view-vinculos" class="view-section max-w-4xl mx-auto">
+        <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Consulta de Vínculos</h1>
+            <input type="text" id="inputBuscaVinculo" onkeyup="buscarVinculoDebounced()" placeholder="Pesquise por qualquer termo..." class="w-full px-5 py-4 border border-gray-300 rounded-xl shadow-sm outline-none focus:ring-2 focus:ring-orange-500 text-lg mb-8">
+            <div id="resultadoVinculo" class="space-y-4"></div>
+        </div>
+    </div>
+
+
+    <!-- PAGINA DE CONSULTA SITUAÇÕES -->
+    <div id="view-situacoes" class="view-section max-w-4xl mx-auto">
+        <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Consulta de Situações</h1>
+            <input type="text" id="inputBuscaSituacao" onkeyup="buscarSituacaoDebounced()" placeholder="Pesquise por qualquer termo..." class="w-full px-5 py-4 border border-gray-300 rounded-xl shadow-sm outline-none focus:ring-2 focus:ring-cyan-500 text-lg mb-8">
+            <div id="resultadoSituacao" class="space-y-4"></div>
+        </div>
+    </div>
+
+
+    <!-- PAGINA DE LINKS UTEIS -->
+    <div id="view-links" class="view-section max-w-4xl mx-auto">
+        <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-8 text-center">Links Úteis</h1>
+            <div id="containerLinks" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                </div>
+        </div>
+    </div>
+
+    <!-- INICIO SCRIPT -->
+    <script>
+        // Listas auxiliares para construção dinâmica da interface
+        const listaLib = ["Lote financeiro", "Nomeação", "Exoneração", "Reenquadramento", "Ganhos individuais", "Lotes de ganhos individuais", "Nomeação no mesmo órgão", "Alteração de dados funcionais", "Alteração de dados cadastrais", "Alteração de situação funcional", "Disposição", "Alteração de cargo e nível de GATA"];
+        const listaCheck = [
+            { name: "ALTERAÇÃO DE DADOS CADASTRAIS", status: ["Aguardando Distribuição", "Aguardando Homologação", "Retorno"] },
+            { name: "ALTERAÇÃO DE DADOS FUNCIONAIS", status: ["Aguardando Distribuição", "Aguardando Homologação", "Retorno"] },
+            { name: "ALTERAÇÃO DE CARGO E GATA DE COMISSIONADO", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Aguardando Homologação", "Retorno RD", "Retorno RH"] },
+            { name: "REENQUADRAMENTO", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Aguardando Homologação", "Retorno RD", "Retorno RH"] },
+            { name: "LOTE FINANCEIRO", status: ["Em Análise", "Aguardando Distribuição", "Aguardando Analista Superior", "Retorno"] },
+            { name: "LOTE DE GANHOS INDIVIDUAIS PARA SERVIDOR", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Retorno"] },
+            { name: "GANHOS INDIVIDUAIS PARA SERVIDOR", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Retorno"] },
+            { name: "EXONERAÇÃO", status: ["Homologado", "Aguardando Analista Superior"] },
+            { name: "NOMEAÇÃO", status: ["Aguardando Homologação", "Aguardando Analista Superior", "Aguardando Análise", "Aguardando Distribuição", "Retorno RH", "Retorno RD"] },
+            { name: "NOMEAÇÃO CARGO COMISSIONADO NO MESMO ÓRGÃO", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Retorno"] },
+            { name: "DISPOSIÇÃO", status: ["Aguardando Homologação", "Aguardando Analista Superior", "Aguardando Análise", "Aguardando Distribuição", "Retorno RH", "Retorno RD"] },
+            { name: "COMPLEMENTAÇÃO DE CARGA HORARIA", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Aguardando Homologação", "Retorno RD", "Retorno RH"] },
+            { name: "ALTERAÇÃO DE SITUAÇÃO FUNCIONAL", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Aguardando Homologação", "Retorno"] }
+        ];
+
+        // --- FUNÇÕES DE INTERFACE ---
+        // Alterna entre as "telas" do sistema
+        function showView(id) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // Copia texto de um elemento de input/textarea para a área de transferência
+        function copyToClipboard(areaId, msgId) {
+            const area = document.getElementById(areaId);
+            if(!area.value) return;
+            navigator.clipboard.writeText(area.value).then(() => {
+                const msg = document.getElementById(msgId);
+                msg.classList.remove('opacity-0');
+                setTimeout(() => msg.classList.add('opacity-0'), 2000);
+            });
+        }
+
+        // Copia um texto arbitrário e fornece feedback visual no botão clicado
+        function copyRawTextFeedback(text, btnId) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById(btnId);
+                const originalText = btn.innerText;
+                btn.innerText = "Copiado!";
+                btn.classList.add('bg-green-600');
+                btn.classList.remove('bg-purple-600');
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('bg-green-600');
+                    btn.classList.add('bg-purple-600');
+                }, 2000);
+            });
+        }
+
+
+        // Função Debounce para evitar sobrecarga
+        function debounce(func, timeout = 300) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => { func.apply(this, args); }, timeout);
+            };
+        }
+
+
+        const database_config_busca = {
+            "resultadoConsulta": {
+                "database": typeof dbOrgaos !== 'undefined' ? dbOrgaos : [],
+                "colunas": ["sigla", "orgao", "codigo", "grupo", "tipo"],
+                "render": renderizarOrgaos
+            },
+            "resultadoVinculo": {
+                "database": typeof dbVinculos !== 'undefined' ? dbVinculos : [],
+                "colunas": ["id", "titulo", "regime", "descricao", "detalhe"],
+                "render": renderizarVinculos
+            },
+            "resultadoSituacao": {
+                "database": typeof dbSituacoes !== 'undefined' ? dbSituacoes : [],
+                "colunas": ["cod", "desc", "detalhe"],
+                "render": renderizarSituacoes
+            }
+        };
+
+
+        // --- NOVA FUNÇÃO DE BUSCA UNIFICADA ---
+        function realizarBuscaUniversal(inputId, containerId) {
+                    const termo = removerAcentos(document.getElementById(inputId).value.toLowerCase().trim());
+                    const container = document.getElementById(containerId);
+                    const config = database_config_busca[containerId];
+
+                    if (termo.length < 1) return container.innerHTML = '';
+
+                    const filtrados = config.database.filter(item => {
+                        // Percorre apenas as colunas definidas no database_config_busca
+                        return config.colunas.some(coluna => {
+                            const valorCampo = removerAcentos(String(item[coluna] || "").toLowerCase());
+                            return valorCampo.includes(termo);
+                        });
+                    });
+
+                    config.render(filtrados);
+                }
+
+        
+        const removerAcentos = (texto) => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+
+
+        // Gatilhos debounced apontando para a função universal
+        const buscarOrgaoDebounced = debounce(() => realizarBuscaUniversal('inputBuscaOrgao', 'resultadoConsulta'), 300);
+        const buscarVinculoDebounced = debounce(() => realizarBuscaUniversal('inputBuscaVinculo', 'resultadoVinculo'), 300);
+        const buscarSituacaoDebounced = debounce(() => realizarBuscaUniversal('inputBuscaSituacao', 'resultadoSituacao'), 300);
+
+
+        // --- RENDERIZADORES DE RESULTADOS ---
+        // --- RESULTADOS ÓRGÃO ---
+        function renderizarOrgaos(filtrados) {
+                    document.getElementById('resultadoConsulta').innerHTML = filtrados.map((i, idx) => `
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4"><span class="uppercase">${i.sigla}</span> - ${i.orgao}</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-4 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                <div><p class="text-[12px] uppercase font-bold text-gray-400">Código</p><p class="text-base font-semibold text-gray-700">${i.codigo}</p></div>
+                                <div><p class="text-[12px] uppercase font-bold text-gray-400">Grupo</p><p class="text-base font-semibold text-gray-700">${i.grupo}</p></div>
+                                <div><p class="text-[12px] uppercase font-bold text-gray-400">Tipo</p><p class="text-base font-semibold text-gray-700">${i.tipo}</p></div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <button id="btnCopOrg-${idx}" onclick="copyRawTextFeedback('${i.link}', 'btnCopOrg-${idx}')" class="flex-1 bg-purple-600 text-white py-2 rounded-lg text-sm font-bold transition-all hover:bg-purple-700">Copiar Link</button>
+                                <a href="${i.link}" target="_blank" class="flex-1 bg-gray-100 text-gray-700 text-center py-2 rounded-lg text-sm font-bold hover:bg-gray-200">Abrir Pasta</a>
+                            </div>
+                        </div>`).join('');
+        }
+
+        // --- RESULTADOS VINCULO ---
+        function renderizarVinculos(filtrados) {
+                    document.getElementById('resultadoVinculo').innerHTML = filtrados.map((i) => `
+                        <div class="flex flex-col md:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="bg-gray-50 border-r border-gray-200 p-5 flex flex-col justify-center items-center min-w-[140px]">
+                                <span class="text-orange-600 font-black text-5xl uppercase">${i.id}</span>
+                                <p class="text-[10px] uppercase font-bold text-gray-400 mt-2">Vínculo</p>
+                            </div>
+                            <div class="flex-1 p-5">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">${i.titulo}</h3>
+                                <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                                    <div><p class="text-[10px] uppercase font-bold text-gray-400">Regime</p><p class="font-semibold text-gray-700">${i.regime}</p></div>
+                                    <div><p class="text-[10px] uppercase font-bold text-gray-400">Previdência</p><p class="font-semibold text-gray-700">${i.descricao}</p></div>
+                                </div>
+                                <div class="bg-orange-50 p-3 rounded-lg border border-orange-100"><p class="text-sm text-orange-900 font-medium">${i.detalhe}</p></div>
+                            </div>
+                        </div>`).join('');
+        }
+
+
+        // --- RESULTADOS SITUAÇÃO ---
+        function renderizarSituacoes(filtrados) {
+                    document.getElementById('resultadoSituacao').innerHTML = filtrados.map((i) => `
+                        <div class="flex flex-col md:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="bg-gray-50 border-r border-gray-200 p-5 flex flex-col justify-center items-center min-w-[140px]">
+                                <span class="text-cyan-600 font-black text-4xl uppercase">${i.cod}</span>
+                                <p class="text-[10px] uppercase font-bold text-gray-400 mt-2">Código</p>
+                            </div>
+                            <div class="flex-1 p-5">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">${i.desc}</h3>
+                                <div class="bg-cyan-50 p-3 rounded-lg border border-cyan-100 mt-4"><p class="text-sm text-cyan-900 font-medium">${i.detalhe}</p></div>
+                            </div>
+                        </div>`).join('');
+        }
+
+
+        // --- FUNÇÕES DE GERAÇÃO DE TEXTO ---
+        // Gera a mensagem de liberação baseada na sigla, módulos selecionados e horário
+        function generateLib() {
+            const sigla = document.getElementById('orgaoSigla').value.toUpperCase().trim();
+            const hora = document.getElementById('horaLiberacao').value;
+            const sel = Array.from(document.querySelectorAll('input[name="mLib"]:checked')).map(c => `- ${c.value}`);
+            if(!sigla) return alert("Informe a sigla.");
+            let wa = `*${sigla}*\n${sel.join('\n')}\n\nSistema liberado${hora ? ' até as '+hora : '.'}`;
+            document.getElementById('outLib').value = wa;
+            document.getElementById('outChamado').value = hora ? `Sistema liberado até as ${hora}.` : "Sistema liberado.";
+        }
+
+        // Gera o texto formatado do checklist apenas com os itens que possuem valor > 0
+        function generateCheck() {
+            const inputs = document.querySelectorAll('#checklistGrid input');
+            let res = ""; let mod = "";
+            inputs.forEach(i => {
+                if(parseInt(i.value) > 0) {
+                    if(mod !== i.dataset.mod) { mod = i.dataset.mod; res += (res ? "\n" : "") + `*${mod}*\n`; }
+                    res += `${i.dataset.stat} – ${i.value}\n`;
+                }
+            });
+            document.getElementById('outCheck').value = res.trim();
+        }
+
+        // RESRTA OS CAMPOS DA TELA DE LIBERAÇÃO
+        function clearLib() { 
+            // Limpa a sigla
+            document.getElementById('orgaoSigla').value = ""; 
+
+            // VERIFICAÇÃO DO CHECKBOX: Só apaga se NÃO estiver marcado
+            const salvarHora = document.getElementById('checkSalvarHora').checked;
+            if (!salvarHora) {
+                document.getElementById('horaLiberacao').value = "";
+            }
+
+            // Desmarca os módulos
+            document.querySelectorAll('input[name="mLib"]').forEach(c => c.checked = false);
+
+            // Limpa as saídas
+            document.getElementById('outLib').value = ""; 
+            document.getElementById('outChamado').value = "";
+        }
+
+            function renderLinks() {
+            const container = document.getElementById('containerLinks');
+            // Ele lê a variável 'dbLinks' que vem do arquivo externo
+            container.innerHTML = dbLinks.map(link => `
+                <a href="${link.url}" target="_blank" class="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-pink-50 hover:border-pink-300 transition-all group">
+                    <span class="font-bold text-gray-700 group-hover:text-pink-700">${link.nome}</span>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+            `).join('');
+        }
+    
+        // Reseta todos os contadores da tela de Checklist
+        function clearCheck() { 
+            document.querySelectorAll('#checklistGrid input').forEach(i => i.value = 0);
+            document.getElementById('outCheck').value = "";
+        }
+
+        // --- INICIALIZAÇÃO: Monta a interface dinâmica ao carregar a página ---
+        window.onload = () => {
+            // Monta os Checkboxes da Liberação
+            document.getElementById('modulosLibContainer').innerHTML = listaLib.map(m => `
+                <label class="flex items-center p-3 rounded-lg border border-transparent hover:border-blue-200 hover:bg-blue-50 cursor-pointer transition-all">
+                    <input type="checkbox" name="mLib" value="${m}" class="h-5 w-5 text-blue-600 rounded">
+                    <span class="ml-3 text-sm font-medium text-gray-700">${m}</span>
+                </label>`).join('');
+
+            // Monta o Grid do Checklist com grupos e sub-itens (status)
+            // Tamanho do texto módulo: text-[14px / tamanho do texto status: text-sm
+            document.getElementById('checklistGrid').innerHTML = listaCheck.map(m => `
+                <div class="module-group p-4 rounded-xl">
+                    <h3 class="text-blue-700 font-extrabold text-[14px] mb-2 uppercase tracking-wider">${m.name}</h3>
+                    ${m.status.map(s => `
+                        <div class="flex justify-between items-center mb-1 text-sm">
+                            <label class="text-gray-600">${s}</label>
+                            <input type="number" data-mod="${m.name}" data-stat="${s}" value="0" min="0" class="w-12 border rounded text-center">
+                        </div>`).join('')}
+                </div>`).join('');
+            renderLinks(); 
+        };
+    </script>
+    <!-- FIM SCRIPT -->
+</body>
+</html>
