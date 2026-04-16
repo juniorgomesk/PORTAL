@@ -15,6 +15,9 @@
         .view-section { display: none; }
         .view-section.active { display: block; }
         
+        /* Garante que o login centralize na tela se necessário */
+        #view-login.active { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+
         /* Estilização dos cards de módulos do checklist */
         .module-group {
             border: 1px solid #e5e7eb;
@@ -26,44 +29,109 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
     </style>
+    
+    
     <!-- CHAMA OS DATABASES -->
     <script src="database_links.js"></script>
     <script src="database_situacoes.js"></script>
     <script src="database_orgaos.js"></script>
     <script src="database_vinculos.js"></script>
+    <script src="database_logins.js"></script>
+
 </head>
+
+
 <body class="min-h-screen p-4 md:p-8">
+
+
+
+
+
+    <!-- TELA DE LOGIN -->
+    <div id="view-login" class="view-section active">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-extrabold text-gray-900">Portal SGRH</h1>
+                <p class="text-gray-500 mt-2">Identifique-se para continuar</p>
+            </div>
+                
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+                    <input type="text" id="userLogin" class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                    <input type="password" id="passLogin" class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                    
+                <p id="errorLogin" class="text-red-500 text-sm font-semibold hidden">Usuário ou senha incorretos!</p>
+                    
+                <button onclick="autenticar()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+                    Entrar no Sistema
+            </button>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+    <!-- TELA INICIAL -->
     <!-- CABEÇALHO DA PAGINA INICIAL -->
-    <div id="view-home" class="view-section active max-w-5xl mx-auto">
+    <div id="view-home" class="view-section max-w-5xl mx-auto">
         <div class="text-center mb-12">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Funcionalidades de suporte</h1>
             <p class="text-gray-600">Selecione a funcionalidade que deseja utilizar</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div id="grid-home" class="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto">
             
+
+            <!-- BOTÃO OPÇÕES -->
+                <button onclick="showView('view-opcoes')" class="absolute top-4 right-24 flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all font-bold text-sm shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 0 1 0 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 0 1 0-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <span>Opções</span>
+                </button>
+
+
+            <!-- BOTÃO LOGOUT -->
+                <button onclick="confirmarLogout()" class="absolute top-4 right-4 flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all font-bold text-sm shadow-sm">
+                    <span>Sair</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                    </svg>
+                </button>
+
+
             <!-- BOTÃO DE LIBERAÇÃO -->
-            <button onclick="showView('view-liberacao')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-blue-500">
-                <div class="bg-blue-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+            <button id="btn-liberacao" onclick="showView('view-liberacao')" class="tool-card group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-blue-500 w-full md:w-[300px] h-[160px] flex flex-col justify-between">
+                <div class="bg-blue-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-blue-600 group-hover:text-white">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                     </svg>
                 </div>
                 <h2 class="text-lg font-bold text-gray-800 mb-1">Liberação de sistema</h2>
                 <p class="text-xs text-gray-500">Mensagens padrão WhatsApp e Chamados</p>
             </button>
             
+
             <!-- BOTÃO DE CHECKLIST --> 
-            <button onclick="showView('view-checklist')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-green-500">
-                <div class="bg-green-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-600 transition-colors">
+            <button id="btn-checklist" onclick="showView('view-checklist')" class="tool-card group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-green-500 w-full md:w-[300px] h-[160px] flex flex-col justify-between">
+                <div class="bg-green-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-green-600 transition-colors">
                     <svg class="w-6 h-6 text-green-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                 </div>
-                <h2 class="text-lg font-bold text-gray-800 mb-1">Checklist folha de pagemento</h2>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Checklist folha</h2>
                 <p class="text-xs text-gray-500">Pendências de fechamento</p>
             </button>
             
+
             <!-- BOTÃO DE ÓRGÃOS -->
-            <button onclick="showView('view-consulta')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-purple-500">
-                <div class="bg-purple-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-600 transition-colors">
+            <button id="btn-consulta" onclick="showView('view-consulta')" class="tool-card group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-purple-500 w-full md:w-[300px] h-[160px] flex flex-col justify-between">
+                <div class="bg-purple-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-purple-600 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-purple-600 group-hover:text-white">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
                     </svg>
@@ -72,27 +140,30 @@
                 <p class="text-xs text-gray-500">Consulta a códigos e grupos</p>
             </button>
             
+
             <!-- BOTÃO DE VINCULOS -->
-            <button onclick="showView('view-vinculos')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-orange-500">
-                <div class="bg-orange-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-orange-600 transition-colors">
+            <button id="btn-vinculos" onclick="showView('view-vinculos')" class="tool-card group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-orange-500 w-full md:w-[300px] h-[160px] flex flex-col justify-between">
+                <div class="bg-orange-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-orange-600 transition-colors">
                     <svg class="w-6 h-6 text-orange-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
                 </div>
                 <h2 class="text-lg font-bold text-gray-800 mb-1">Consultas aos vínculos</h2>
                 <p class="text-xs text-gray-500">Consulta a códigos e descrições</p>
             </button>
 
+
             <!-- BOTÃO DE SITUAÇÕES -->
-            <button onclick="showView('view-situacoes')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-cyan-500">
-                <div class="bg-cyan-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-cyan-600 transition-colors">
+            <button id="btn-situacoes" onclick="showView('view-situacoes')" class="tool-card group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-cyan-500 w-full md:w-[300px] h-[160px] flex flex-col justify-between">
+                <div class="bg-cyan-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-cyan-600 transition-colors">
                     <svg class="w-6 h-6 text-cyan-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 </div>
                 <h2 class="text-lg font-bold text-gray-800 mb-1">Situações funcionais</h2>
                 <p class="text-xs text-gray-500">Consulta a códigos e descrições</p>
             </button>
 
+
             <!-- BOTÃO DE LINKS -->
-            <button onclick="showView('view-links')" class="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-pink-500">
-                <div class="bg-pink-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-pink-600 transition-colors">
+            <button id="btn-links" onclick="showView('view-links')" class="tool-card group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left border-2 border-transparent hover:border-pink-500 w-full md:w-[300px] h-[160px] flex flex-col justify-between">
+                <div class="bg-pink-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-pink-600 transition-colors">
                     <svg class="w-6 h-6 text-pink-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                 </div>
                 <h2 class="text-lg font-bold text-gray-800 mb-1">Links de uso diários</h2>
@@ -102,6 +173,34 @@
         </div>
     </div>
 
+
+
+
+
+    <!-- PAGINAS DE OPÇÕES -->
+    <div id="view-opcoes" class="view-section max-w-2xl mx-auto">
+        <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
+        <div class="bg-white p-8 rounded-xl shadow-2xl">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Configurar Ferramentas</h1>
+            
+            <div class="space-y-4">
+                <label class="flex items-center p-3 bg-gray-50 rounded-lg border-2 border-blue-200 cursor-pointer">
+                    <input type="checkbox" id="checkExibirTodas" checked onchange="toggleTodas(this)" class="h-5 w-5 text-blue-600 rounded">
+                    <span class="ml-3 font-bold text-gray-700">Exibir Todas</span>
+                </label>
+                <hr>
+                <div id="listaPreferencias" class="grid grid-cols-1 gap-3">
+                    </div>
+            </div>
+            <button onclick="salvarPreferencias()" class="w-full mt-8 bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all">Salvar Configurações</button>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- PAGINAS DE FERRAMENTAS -->
     <!-- PAGINA DE LIBERAÇÃO -->
     <div id="view-liberacao" class="view-section max-w-2xl mx-auto">
         <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
@@ -130,6 +229,7 @@
             </div>
             <div class="space-y-6">
                 <div>
+
                      <!-- CAIXA DA INFORMAÇÃO DE LIBERAÇÃO -->
                     <label class="text-sm font-bold text-gray-500">Informação de liberação</label>
                     <div class="relative group mt-1">
@@ -141,6 +241,7 @@
                     <p id="msgLib" class="mt-1 text-sm text-green-600 font-semibold opacity-0 h-5 text-right transition-opacity">Copiado!</p>
                 </div>
                 <div>
+
                     <!-- CAIXA DA RESPOSTA DO CHAMADO -->
                     <label class="text-sm font-bold text-gray-500">Resposta chamado</label>
                     <div class="relative group mt-1">
@@ -154,6 +255,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- PAGINA DE CHECKLIST -->
     <div id="view-checklist" class="view-section max-w-5xl mx-auto">
@@ -178,6 +280,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- PAGINA DE CONSULTA ÓRGÃOS -->
     <div id="view-consulta" class="view-section max-w-4xl mx-auto">
@@ -216,14 +319,174 @@
     <div id="view-links" class="view-section max-w-4xl mx-auto">
         <button onclick="showView('view-home')" class="mb-6 flex items-center text-blue-600 font-semibold hover:underline">← Voltar ao Início</button>
         <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl">
-            <h1 class="text-3xl font-extrabold text-gray-800 mb-8 text-center">Links</h1>
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-8 text-center">Links Úteis</h1>
             <div id="containerLinks" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 </div>
         </div>
     </div>
 
+
+
+
+
     <!-- INICIO SCRIPT -->
     <script>
+    
+
+        // FUNÇÃO OPÇÕES
+        const ferramentasIds = ['btn-liberacao', 'btn-checklist', 'btn-consulta', 'btn-vinculos', 'btn-situacoes', 'btn-links'];
+
+        // Gera a lista de checkboxes na tela de opções
+        function renderizarOpcoes() {
+            const container = document.getElementById('listaPreferencias');
+            const prefs = JSON.parse(localStorage.getItem('pref_ferramentas')) || ferramentasIds;
+
+            container.innerHTML = ferramentasIds.map(id => {
+                const btn = document.getElementById(id);
+                const nome = btn ? btn.querySelector('h2').innerText : id;
+                const checked = prefs.includes(id) ? 'checked' : '';
+                
+                return `
+                    <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" class="check-ferramenta h-5 w-5 text-blue-600 rounded" 
+                            data-id="${id}" ${checked} onchange="verificarMaster()">
+                        <span class="ml-3 text-gray-700 font-medium">${nome}</span>
+                    </label>
+                `;
+            }).join('');
+            verificarMaster();
+        }
+
+        // Lógica do checkbox "Exibir Todas"
+        function toggleTodas(master) {
+            document.querySelectorAll('.check-ferramenta').forEach(cb => cb.checked = master.checked);
+        }
+
+        // Desmarca o "Exibir Todas" se algum individual for desmarcado
+        function verificarMaster() {
+            const todos = document.querySelectorAll('.check-ferramenta');
+            const marcados = document.querySelectorAll('.check-ferramenta:checked');
+            document.getElementById('checkExibirTodas').checked = (todos.length === marcados.length);
+        }
+
+        // Salva e aplica a visibilidade
+        function salvarPreferencias() {
+            const marcados = Array.from(document.querySelectorAll('.check-ferramenta:checked')).map(cb => cb.dataset.id);
+            localStorage.setItem('pref_ferramentas', JSON.stringify(marcados));
+            aplicarPreferencias();
+            showView('view-home');
+        }
+
+            // Esconde/Mostra os botões na Home
+            function aplicarPreferencias() {
+                // Definimos os IDs aqui dentro para garantir que a função sempre saiba o que procurar
+                const listaIds = ['btn-liberacao', 'btn-checklist', 'btn-consulta', 'btn-vinculos', 'btn-situacoes', 'btn-links'];
+                
+                // Pega o que está salvo. Se não existir nada (null), ele usa a lista completa (listaIds)
+                const salvas = localStorage.getItem('pref_ferramentas');
+                const prefs = salvas ? JSON.parse(salvas) : listaIds;
+
+                listaIds.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) {
+                        // Mudamos para 'flex' para manter o alinhamento interno do botão
+                        btn.style.display = prefs.includes(id) ? 'flex' : 'none';
+                    }
+                });
+        }
+
+
+
+        // FUNÇÃO DE LOGIN
+        function autenticar() {
+            const user = document.getElementById('userLogin').value;
+            const pass = document.getElementById('passLogin').value;
+            const errorMsg = document.getElementById('errorLogin');
+            const usuarioValido = typeof dbLogins !== 'undefined' && dbLogins.find(u => u.usuario === user && u.senha === pass);
+
+            if (usuarioValido) {
+                errorMsg.classList.add('hidden');
+                
+                // SALVA O LOGIN: Guarda uma marcação de que o usuário está logado
+                localStorage.setItem('usuarioLogado', 'true');
+                localStorage.setItem('dataLogin', new Date().getTime()); // Guarda o momento do login
+
+                showView('view-home');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        // Opcional: Permitir dar 'Enter' para logar
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && document.getElementById('view-login').classList.contains('active')) {
+                autenticar();
+            }
+        });
+        
+
+        // --- FUNÇÕES ONLOAD ---
+            window.onload = () => {
+        // --- VERIFICAÇÃO DE SESSÃO ATIVA ---
+        const logado = localStorage.getItem('usuarioLogado');
+        const dataLogin = localStorage.getItem('dataLogin');
+        const tempoLimite = 8 * 60 * 60 * 1000; // Define 8 horas em milissegundos
+
+        if (logado === 'true' && dataLogin) {
+            const agora = new Date().getTime();
+            
+            // Se ainda estiver dentro do prazo de 8 horas
+            if (agora - dataLogin < tempoLimite) {
+                showView('view-home');
+            } else {
+                // Se passou do tempo, limpa e pede login
+                localStorage.clear();
+            }
+        }
+
+
+            renderizarOpcoes();     // Desenha os checkboxes na tela de opções
+            aplicarPreferencias();  // Esconde os botões que o usuário desmarcou anteriormente  
+
+
+            // Monta os Checkboxes da Liberação
+            document.getElementById('modulosLibContainer').innerHTML = listaLib.map(m => `
+                <label class="flex items-center p-3 rounded-lg border border-transparent hover:border-blue-200 hover:bg-blue-50 cursor-pointer transition-all">
+                    <input type="checkbox" name="mLib" value="${m}" class="h-5 w-5 text-blue-600 rounded">
+                    <span class="ml-3 text-sm font-medium text-gray-700">${m}</span>
+                </label>`).join('');
+
+            // Monta o Grid do Checklist com grupos e sub-itens (status)
+            // Tamanho do texto módulo: text-[14px / tamanho do texto status: text-sm
+            document.getElementById('checklistGrid').innerHTML = listaCheck.map(m => `
+                <div class="module-group p-4 rounded-xl">
+                    <h3 class="text-blue-700 font-extrabold text-[14px] mb-2 uppercase tracking-wider">${m.name}</h3>
+                    ${m.status.map(s => `
+                        <div class="flex justify-between items-center mb-1 text-sm">
+                            <label class="text-gray-600">${s}</label>
+                            <input type="number" data-mod="${m.name}" data-stat="${s}" value="0" min="0" class="w-12 border rounded text-center">
+                        </div>`).join('')}
+                </div>`).join('');
+            renderLinks(); 
+        };
+        
+
+        // FUNÇÃO LOGOUT
+        function confirmarLogout() {
+            // Abre a janelinha de confirmação do navegador
+            const confirmacao = confirm("Deseja realmente sair do sistema?");
+            
+            if (confirmacao) {
+                // Se confirmou, limpa o banco de dados local do navegador
+                localStorage.removeItem('usuarioLogado');
+                localStorage.removeItem('dataLogin');
+                
+                // Recarrega a página para resetar todos os estados e voltar ao login
+                window.location.reload();
+            }
+        }
+
+
         // Listas auxiliares para construção dinâmica da interface
         const listaLib = ["Lote financeiro", "Nomeação", "Exoneração", "Reenquadramento", "Ganhos individuais", "Lotes de ganhos individuais", "Nomeação no mesmo órgão", "Alteração de dados funcionais", "Alteração de dados cadastrais", "Alteração de situação funcional", "Disposição", "Alteração de cargo e nível de GATA"];
         const listaCheck = [
@@ -242,6 +505,7 @@
             { name: "ALTERAÇÃO DE SITUAÇÃO FUNCIONAL", status: ["Aguardando Análise", "Aguardando Analista Superior", "Aguardando Distribuição", "Aguardando Homologação", "Retorno"] }
         ];
 
+
         // --- FUNÇÕES DE INTERFACE ---
         // Alterna entre as "telas" do sistema
         function showView(id) {
@@ -249,6 +513,7 @@
             document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
         }
+
 
         // Copia texto de um elemento de input/textarea para a área de transferência
         function copyToClipboard(areaId, msgId) {
@@ -260,6 +525,7 @@
                 setTimeout(() => msg.classList.add('opacity-0'), 2000);
             });
         }
+
 
         // Copia um texto arbitrário e fornece feedback visual no botão clicado
         function copyRawTextFeedback(text, btnId) {
@@ -288,6 +554,7 @@
         }
 
 
+        // --- PARAMETRIZAÇÃO FUNÇÃO BUSCA ---
         const database_config_busca = {
             "resultadoConsulta": {
                 "database": typeof dbOrgaos !== 'undefined' ? dbOrgaos : [],
@@ -307,7 +574,7 @@
         };
 
 
-        // --- NOVA FUNÇÃO DE BUSCA UNIFICADA ---
+        // --- FUNÇÃO DE BUSCA UNIFICADA ---
         function realizarBuscaUniversal(inputId, containerId) {
                     const termo = removerAcentos(document.getElementById(inputId).value.toLowerCase().trim());
                     const container = document.getElementById(containerId);
@@ -353,6 +620,7 @@
                             </div>
                         </div>`).join('');
         }
+
 
         // --- RESULTADOS VINCULO ---
         function renderizarVinculos(filtrados) {
@@ -402,6 +670,7 @@
             document.getElementById('outChamado').value = hora ? `Sistema liberado até as ${hora}.` : "Sistema liberado.";
         }
 
+
         // Gera o texto formatado do checklist apenas com os itens que possuem valor > 0
         function generateCheck() {
             const inputs = document.querySelectorAll('#checklistGrid input');
@@ -414,6 +683,7 @@
             });
             document.getElementById('outCheck').value = res.trim();
         }
+
 
         // RESRTA OS CAMPOS DA TELA DE LIBERAÇÃO
         function clearLib() { 
@@ -451,28 +721,6 @@
             document.getElementById('outCheck').value = "";
         }
 
-        // --- INICIALIZAÇÃO: Monta a interface dinâmica ao carregar a página ---
-        window.onload = () => {
-            // Monta os Checkboxes da Liberação
-            document.getElementById('modulosLibContainer').innerHTML = listaLib.map(m => `
-                <label class="flex items-center p-3 rounded-lg border border-transparent hover:border-blue-200 hover:bg-blue-50 cursor-pointer transition-all">
-                    <input type="checkbox" name="mLib" value="${m}" class="h-5 w-5 text-blue-600 rounded">
-                    <span class="ml-3 text-sm font-medium text-gray-700">${m}</span>
-                </label>`).join('');
-
-            // Monta o Grid do Checklist com grupos e sub-itens (status)
-            // Tamanho do texto módulo: text-[14px / tamanho do texto status: text-sm
-            document.getElementById('checklistGrid').innerHTML = listaCheck.map(m => `
-                <div class="module-group p-4 rounded-xl">
-                    <h3 class="text-blue-700 font-extrabold text-[14px] mb-2 uppercase tracking-wider">${m.name}</h3>
-                    ${m.status.map(s => `
-                        <div class="flex justify-between items-center mb-1 text-sm">
-                            <label class="text-gray-600">${s}</label>
-                            <input type="number" data-mod="${m.name}" data-stat="${s}" value="0" min="0" class="w-12 border rounded text-center">
-                        </div>`).join('')}
-                </div>`).join('');
-            renderLinks(); 
-        };
     </script>
     <!-- FIM SCRIPT -->
 </body>
