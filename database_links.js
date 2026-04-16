@@ -11,5 +11,6 @@ const dbLinks = [
     { nome: "DIÁRIO OFICIAL", url: "https://diario.imprensaoficial.am.gov.br/" },
     { nome: "PONTO CELULAR", url: "https://pontosead.site/" },
     { nome: "PONTO COMPUTADOR", url: "http://10.46.22.175:81/ponto%20sead/" },
-    { nome: "CRONOGRAMA FOLHA", url: "https://chamadossgrh.site/cronograma_folha/calendario.php" }
+    { nome: "CRONOGRAMA FOLHA", url: "https://chamadossgrh.site/cronograma_folha/calendario.php" },
+    { nome: "PLANILHA DE CHAMADOS PENDENTES", url: "https://office365prodam-my.sharepoint.com/:x:/g/personal/sgrh_sead_am_gov_br/EexhOxSMrdBApuMDEYvZYucBehh3lX26N9p1MLntsBGp8w?rtime=gk0wL1pM3Ug" }
 ];
